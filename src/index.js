@@ -8,9 +8,6 @@ import { Spinner } from 'spin.js';
 import { spinnerOptions } from './spinnerOpts';
 
 
-const ghpages = require('gh-pages');
-ghpages.publish('dist', function(err) {});
-
 const _ = require('lodash');
 
 let map;
