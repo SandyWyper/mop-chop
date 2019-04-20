@@ -73,6 +73,8 @@ body {
 }
 
 .app-title {
+    display:flex;
+    justify-content: space-around;
     background-color: var(--colorTwo);
     color: var(--colorOne);
 
@@ -85,6 +87,10 @@ body {
     text-transform: uppercase;
 
     padding: 20px 0;
+}
+.app-title img {
+    height: 40px;
+    width: auto;
 }
 
 form {

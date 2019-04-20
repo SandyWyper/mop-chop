@@ -257,7 +257,7 @@ function theseShops(results, status) {
 
         if (results.website) {
             document.querySelector(`#${results.place_id}-website-link`).innerHTML += `
-             <a href="${results.website}" target="_blank"><img src="../images/website.png"></a>
+             <a href="${results.website}" target="_blank"><img src="./images/website.png"></a>
             `;
         }
 
