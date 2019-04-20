@@ -238,7 +238,7 @@ function theseShops(results, status) {
 
                         
                         <div class="website-link" id="${results.place_id}-website-link">
-                        <p>click for link to their website ---> </p>
+                       
                         </div>
                     </div>
                     <div class="photos">    
@@ -257,6 +257,7 @@ function theseShops(results, status) {
 
         if (results.website) {
             document.querySelector(`#${results.place_id}-website-link`).innerHTML += `
+             <p>click for link to their website --> </p>
              <a href="${results.website}" target="_blank"><img src="./images/website.png"></a>
             `;
         }
@@ -309,7 +310,7 @@ function createMarker(place) {
 
     //set the icon image and size preferences
     const iconImage = {
-        url: `../images/number-icons/number_${shopCounter}.png`,
+        url: `./images/number-icons/number_${shopCounter}.png`,
         scaledSize: new google.maps.Size(35, 35)
     };
 
