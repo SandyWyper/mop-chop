@@ -206,7 +206,7 @@ function theseShops(results, status) {
 
         locationsDisplayed.innerHTML += `
         <section class="location">
-            <div class="location-main-section" data-id="${results.place_id}">
+            <div class="location-main-section" id="${results.place_id}-section" data-id="${results.place_id}">
                 <h1>${shopCounter}</h1>
                 <div class="name-ratings">
                     <div class="name">
@@ -339,6 +339,7 @@ function revealInfo(event) {
         // use the place_id from this section to reveal the correct box
         document.querySelector(`.${id}-hidden-section`).classList.toggle("hide");
         document.querySelector(`#${id}-down-arrow`).classList.toggle("spin");
+        document.querySelector(`#${id}-section`).classList.toggle("active");
     }
 
     // event.preventDefault();

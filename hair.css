@@ -199,6 +199,10 @@ input {
 .hide {
     display: none;
 }
+.active {
+     background-color: var(--colorOne);
+    color: var(--colorTwo);
+}
 
 .details {
     display: flex;
