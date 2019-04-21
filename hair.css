@@ -73,7 +73,7 @@ body {
 }
 
 .app-title {
-    display:flex;
+    display: flex;
     justify-content: space-around;
     background-color: var(--colorTwo);
     color: var(--colorOne);
@@ -88,6 +88,7 @@ body {
 
     padding: 20px 0;
 }
+
 .app-title img {
     height: 40px;
     width: auto;
@@ -154,8 +155,8 @@ input {
 
 .location-main-section h1 {
     padding: 0px 20px;
-    background-color: var(--colorTwo);
-    color: var(--colorOne);
+    /*    background-color: var(--colorTwo);
+    color: var(--colorOne);*/
     height: 100%;
     font-size: 40px;
 
@@ -199,8 +200,9 @@ input {
 .hide {
     display: none;
 }
+
 .active {
-     background-color: var(--colorOne);
+    background-color: var(--colorOne);
     color: var(--colorTwo);
 }
 
