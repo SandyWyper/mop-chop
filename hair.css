@@ -179,10 +179,7 @@ input {
 .more-info {
     text-align: center;
     padding: 6px;
-    /*border: 1px solid black;*/
     margin: auto 0 auto auto;
-    /*background-color: darkred;*/
-    color: white;
     font-family: var(--fontOne);
 
     z-index: 20;
