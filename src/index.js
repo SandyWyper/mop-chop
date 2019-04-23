@@ -16,7 +16,7 @@ let places = [];
 let locationsDisplayed = document.querySelector('#location-details');
 let mapWindow = document.querySelector('#map');
 let shopCounter = 1;
-let location;
+// let location
 
 
 function callApi() {
@@ -54,7 +54,7 @@ function getGeoLoc() {
 
     // on success do a geocode search
     function success(pos) {
-        location = {
+       let location = {
             coords: {
                 lat: pos.coords.latitude,
                 lng: pos.coords.longitude
@@ -100,12 +100,21 @@ function locationAddressSearch(query) {
         .then(checkStatus)
         .then((res) => res.json())
         .then(function(data) {
-            location = { coords: data.results[0].geometry.location };
+            let location = extractGeometry(data.results);
             useLocationDetails(location);
         })
         .catch((err) => console.log("error is : " + err));
 }
 
+function extractGeometry(data) {
+    let geometry = {
+        coords: {
+            lat: data[0].geometry.location.lat,
+            lng: data[0].geometry.location.lng
+        }
+    }
+    return geometry;
+}
 
 // resests all out-put for a new search
 function resetApp() {
@@ -119,8 +128,10 @@ function resetApp() {
 
 function useLocationDetails(location) {
     resetApp();
+
+    doMap(location);
     // while the search is being completed, show a spinning wheel
-    let spinner = new Spinner(spinnerOptions).spin(mapWindow);
+    // let spinner = new Spinner(spinnerOptions).spin(mapWindow);
     //start to get info on nearby hairdressers from the places api
     collatePlaceInfo(location);
 }
@@ -182,7 +193,7 @@ function hairCarePlaces(results, status, pagination) {
 
 
 function getAdditionalDetails(salons) {
-    doMap(location);
+    // doMap(location);
 
     let service = new google.maps.places.PlacesService(map);
 
@@ -277,7 +288,7 @@ function theseShops(results, status) {
             let userReviews = results.reviews;
             for (let x = 0; x < userReviews.length; x++) {
                 document.querySelector(`#${results.place_id}-reviews`).innerHTML += `
-                <div class="each-review">
+                <div>
                     <p><strong>Rating : ${userReviews[x].rating}</strong> &nbsp;${userReviews[x].text}</p>
                     <p><b>${userReviews[x].author_name}</b>  ${userReviews[x].relative_time_description}</p>
                     <br>

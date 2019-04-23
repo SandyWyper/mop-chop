@@ -155,11 +155,8 @@ input {
 
 .location-main-section h1 {
     padding: 0px 20px;
-    /*    background-color: var(--colorTwo);
-    color: var(--colorOne);*/
     height: 100%;
     font-size: 40px;
-
 }
 
 .name-ratings {
@@ -188,6 +185,8 @@ input {
 .hidden-section {
     height: 900px;
     width: 100%;
+        font-size: 14px;
+
 }
 
 .spin {
@@ -260,7 +259,6 @@ input {
     overflow: hidden;
     padding: 10px 30px;
     overflow-y: scroll;
-
 }
 
 
