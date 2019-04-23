@@ -33,7 +33,19 @@
     /* Legacy iOS */
 }
 
-
+/* lobster-two-regular - latin */
+@font-face {
+  font-family: 'Lobster Two';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/lobster-two-v11-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local('Lobster Two'), local('LobsterTwo'),
+       url('./fonts/lobster-two-v11-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/lobster-two-v11-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/lobster-two-v11-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/lobster-two-v11-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('./fonts/lobster-two-v11-latin-regular.svg#LobsterTwo') format('svg'); /* Legacy iOS */
+}
 
 
 
@@ -55,6 +67,7 @@ body {
 
     --fontOne: 'Lobster', serif;
     --fontTwo: 'Raleway', sans-serif;
+    --fontThree: 'Lobster Two', serif;
 
 }
 
@@ -63,7 +76,6 @@ body {
     margin: 0 auto;
 
     max-width: 600px;
-    /*min-width: 420px;*/
     font-family: var(--fontTwo);
 
 }
@@ -160,7 +172,9 @@ input {
 }
 
 .name {
-    font-size: 22px;
+    font-family: var(--fontThree);
+    font-weight: 200;
+    font-size: 16px;
     padding: 5px 0;
 }
 
@@ -261,11 +275,11 @@ input {
 
 
 @media only screen and (max-width: 420px) {
-    .wrapper {
+    /*.wrapper {
         width: 100%;
         max-width: none;
             }
-}
+*/}
 
 
 
