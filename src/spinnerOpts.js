@@ -4,7 +4,7 @@ const spinnerOptions = {
   width: 15, // The line thickness
   radius: 57, // The radius of the inner circle
   scale: 1.15, // Scales overall size of the spinner
-  corners: 0, // Corner roundness (0..1)
+  corners: .6, // Corner roundness (0..1)
   color: '#cd8e00', // CSS color or array of colors
   fadeColor: 'transparent', // CSS color or array of colors
   speed: 1.2, // Rounds per second

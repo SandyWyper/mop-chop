@@ -164,7 +164,6 @@ function collatePlaceInfo(location) {
 }
 
 function hairCarePlaces(results, status, pagination) {
-    console.log("results length = " + results.length);
     if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
         results.forEach(function(place, index) {
             if (results[index].user_ratings_total > 4) {
@@ -176,7 +175,8 @@ function hairCarePlaces(results, status, pagination) {
             }
         });
         if (pagination.hasNextPage === true) {
-            console.log("has next page available");
+            // console.log("has next page available");
+
             // this runs the callback function again with the next set of results
             // max 2 additional pages of results. total 60 results.
             pagination.nextPage();
@@ -191,12 +191,10 @@ function hairCarePlaces(results, status, pagination) {
                 getAdditionalDetails(topFiveSalons);
             } else {
                 unsuccsesfulSearch("reviews");
-                // alert("Sorry, mop-chop-shops need at least 5 reviews");
             }
         }
     } else {
         unsuccsesfulSearch("results");
-        // alert("sorry, no results in that area");
     }
 }
 
