@@ -17,7 +17,7 @@ let locationsDisplayed = document.querySelector('#location-details');
 let mapWindow = document.querySelector('#map');
 let shopCounter = 1;
 // let location
-
+let spinner;
 
 function callApi() {
     // use static class function to run npm package to make api request
@@ -131,7 +131,7 @@ function useLocationDetails(location) {
 
     doMap(location);
     // while the search is being completed, show a spinning wheel
-    // let spinner = new Spinner(spinnerOptions).spin(mapWindow);
+     spinner = new Spinner(spinnerOptions).spin(mapWindow);
     //start to get info on nearby hairdressers from the places api
     collatePlaceInfo(location);
 }
@@ -164,8 +164,8 @@ function collatePlaceInfo(location) {
 }
 
 function hairCarePlaces(results, status, pagination) {
-
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
+    console.log("results length = " + results.length);
+    if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
         results.forEach(function(place, index) {
             if (results[index].user_ratings_total > 4) {
                 places.push({
@@ -183,17 +183,39 @@ function hairCarePlaces(results, status, pagination) {
         } else {
             // once all the places have been logged, order them in desecending order by rating
             let sortedByRating = _.orderBy(places, ['userRating', 'totalRatings'], ['desc']);
+
             // then just take the top five
             let topFiveSalons = _.take(sortedByRating, 5);
             // getAdditionalDetails(topFiveSalons);
-            getAdditionalDetails(topFiveSalons);
+            if (topFiveSalons.length > 0) {
+                getAdditionalDetails(topFiveSalons);
+            } else {
+                unsuccsesfulSearch("reviews");
+                // alert("Sorry, mop-chop-shops need at least 5 reviews");
+            }
         }
+    } else {
+        unsuccsesfulSearch("results");
+        // alert("sorry, no results in that area");
     }
 }
 
+function unsuccsesfulSearch(r) {
+    spinner.stop();
+
+ //placeholder map
+    map = new google.maps.Map(mapWindow, initialMapStyling);
+
+    resetApp();
+
+    if ( r === "results") {
+        alert("sorry, no results in that area");
+    } else if ( r === "reviews") {
+        alert("Sorry, mop-chop-shops need at least 5 reviews");
+    }
+}
 
 function getAdditionalDetails(salons) {
-    // doMap(location);
 
     let service = new google.maps.places.PlacesService(map);
 
@@ -211,6 +233,8 @@ function getAdditionalDetails(salons) {
 
 
 function theseShops(results, status) {
+    spinner.stop();
+
 
     if (status === google.maps.places.PlacesServiceStatus.OK) {
         createMarker(results);
@@ -313,7 +337,7 @@ function theseShops(results, status) {
         }
         // increase search result counter by one
         shopCounter++;
-    }
+    } 
 }
 
 
