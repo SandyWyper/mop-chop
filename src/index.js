@@ -16,7 +16,6 @@ let places = [];
 let locationsDisplayed = document.querySelector('#location-details');
 let mapWindow = document.querySelector('#map');
 let shopCounter = 1;
-// let location
 let spinner;
 
 function callApi() {
@@ -26,7 +25,7 @@ function callApi() {
         .catch((e) => console.log("api fetch unsuccessful: " + e));
 }
 
-// listeners and call startMap
+
 function initApp() {
 
     document.querySelector('#location-details').addEventListener('click', revealInfo);
@@ -131,14 +130,14 @@ function useLocationDetails(location) {
 
     doMap(location);
     // while the search is being completed, show a spinning wheel
-     spinner = new Spinner(spinnerOptions).spin(mapWindow);
+    spinner = new Spinner(spinnerOptions).spin(mapWindow);
     //start to get info on nearby hairdressers from the places api
     collatePlaceInfo(location);
 }
 
 function doMap(location) {
     let options = {
-        zoom: 15,
+        zoom: 14,
         center: location.coords,
         zoomControl: false,
         mapTypeControl: false,
@@ -254,8 +253,8 @@ function theseShops(results, status) {
                 <h1>&#8964;</h1>
                 </div>
             </div>
-           
-            <div class="${results.place_id}-hidden-section hide">
+          
+            <div id="${results.place_id}-hidden-section" class="shown hide">
                 <div class="details">
                    <div class="open-phone-address">
                         <div class="address">
@@ -290,7 +289,7 @@ function theseShops(results, status) {
 
         if (results.website) {
             document.querySelector(`#${results.place_id}-website-link`).innerHTML += `
-             <p>click for link to their website --> </p>
+             <p><strong>website: &nbsp;</strong></p>
              <a href="${results.website}" target="_blank"><img src="./images/website.png"></a>
             `;
         }
@@ -370,12 +369,12 @@ function revealInfo(event) {
         let boxToExpand = event.target.closest('.location-main-section');
         let id = boxToExpand.dataset.id;
         // use the place_id from this section to reveal the correct box
-        document.querySelector(`.${id}-hidden-section`).classList.toggle("hide");
+        document.querySelector(`#${id}-hidden-section`).classList.toggle("hide");
+        // document.querySelector(`.${id}-hidden-section`).style.height = '900px';
         document.querySelector(`#${id}-down-arrow`).classList.toggle("spin");
         document.querySelector(`#${id}-section`).classList.toggle("active");
     }
 
-    // event.preventDefault();
 
 }
 
