@@ -11,7 +11,7 @@
 	* phone number
 	* photos
 	* reviews
-	* link to thier website
+	* link to their website
 	* opening hours
 ---
 
