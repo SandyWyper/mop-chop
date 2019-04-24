@@ -1,5 +1,5 @@
 # Mop-Chop-Shop
----	
+
 > Use the Google maps platform to search for 'hair-care' establishments.
 
 ### Application purpose
