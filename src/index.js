@@ -53,7 +53,7 @@ function getGeoLoc() {
 
     // on success do a geocode search
     function success(pos) {
-       let location = {
+        let location = {
             coords: {
                 lat: pos.coords.latitude,
                 lng: pos.coords.longitude
@@ -200,14 +200,14 @@ function hairCarePlaces(results, status, pagination) {
 function unsuccsesfulSearch(r) {
     spinner.stop();
 
- //placeholder map
+    //placeholder map
     map = new google.maps.Map(mapWindow, initialMapStyling);
 
     resetApp();
 
-    if ( r === "results") {
+    if (r === "results") {
         alert("sorry, no results in that area");
-    } else if ( r === "reviews") {
+    } else if (r === "reviews") {
         alert("Sorry, mop-chop-shops need at least 5 reviews");
     }
 }
@@ -224,13 +224,15 @@ function getAdditionalDetails(salons) {
         service.getDetails(request, theseShops);
     });
 
+    spinner.stop();
+    let scrollToMap = document.querySelector('#map');
+    scrollToMap.scrollIntoView({behavior: 'smooth'});
 }
 
 
 
 
 function theseShops(results, status) {
-    spinner.stop();
 
 
     if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -334,7 +336,7 @@ function theseShops(results, status) {
         }
         // increase search result counter by one
         shopCounter++;
-    } 
+    }
 }
 
 
