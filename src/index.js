@@ -106,9 +106,9 @@ function locationAddressSearch(query) {
 }
 
 function extractGeometry(data) {
-    let latitude = _.get(data, '[0].geometry.location.lat');
-    let longitude = _.get(data, '[0].geometry.location.lng');
-    let geometry = {
+    const latitude = _.get(data, '[0].geometry.location.lat');
+    const longitude = _.get(data, '[0].geometry.location.lng');
+    const geometry = {
         coords: {
             lat: latitude,
             lng: longitude
