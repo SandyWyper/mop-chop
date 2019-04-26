@@ -99,17 +99,19 @@ function locationAddressSearch(query) {
         .then(checkStatus)
         .then((res) => res.json())
         .then(function(data) {
-            let location = extractGeometry(data.results);
-            useLocationDetails(location);
+            let searchLocation = extractGeometry(data.results);
+            useLocationDetails(searchLocation);
         })
         .catch((err) => console.log("error is : " + err));
 }
 
 function extractGeometry(data) {
+    let latitude = _.get(data, '[0].geometry.location.lat');
+    let longitude = _.get(data, '[0].geometry.location.lng');
     let geometry = {
         coords: {
-            lat: data[0].geometry.location.lat,
-            lng: data[0].geometry.location.lng
+            lat: latitude,
+            lng: longitude
         }
     }
     return geometry;
