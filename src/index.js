@@ -378,8 +378,6 @@ function revealInfo(event) {
         document.querySelector(`#${id}-down-arrow`).classList.toggle("spin");
         document.querySelector(`#${id}-section`).classList.toggle("active");
     }
-
-
 }
 
 
