@@ -144,19 +144,21 @@ function useLocationDetails(location) {
 }
 
 function doMap(location) {
+  let latitude = parseFloat(location.coords.lat);
+  let longitude = parseFloat(location.coords.lng);
   //   console.log(location.coords.lat, location.coords.lng);
 
-  //   let coords = new google.maps.LatLng(location.coords.lat, location.coords.lng);
-  //   let latitude = parseFloat(location.coords.lat).toFixed(0);
-  //   let longitude = parseFloat(location.coords.lng).toFixed(0);
+//   console.log(latitude, longitude);
+  let coords = new google.maps.LatLng(latitude, longitude);
 
   //   let coords = { Lat: latitude, longitude };
 
-  //   console.log("coords = ", coords);
-
+  //   console.log("coords = ", coords.lat);
+  //
   let options = {
     zoom: 14,
-    center: new google.maps.LatLng(location.coords.lat, location.coords.lng),
+    // center: new google.maps.LatLng(location.coords.lat, location.coords.lng),
+    center: coords,
     zoomControl: false,
     mapTypeControl: false,
     streetViewControl: false,
