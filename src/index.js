@@ -148,7 +148,7 @@ function doMap(location) {
   let longitude = parseFloat(location.coords.lng);
   //   console.log(location.coords.lat, location.coords.lng);
 
-//   console.log(latitude, longitude);
+  //   console.log(latitude, longitude);
   let coords = new google.maps.LatLng(latitude, longitude);
 
   //   let coords = { Lat: latitude, longitude };
@@ -171,9 +171,12 @@ function doMap(location) {
 }
 
 function collatePlaceInfo(location) {
+  let latitude = parseFloat(location.coords.lat);
+  let longitude = parseFloat(location.coords.lng);
+  let coords = new google.maps.LatLng(latitude, longitude);
   // sets parameters for places service search
   const request = {
-    location: location.coords, //   center of search coordinates
+    location: coords, //   center of search coordinates
     radius: "750", //   radius of the search in meters
     type: "hair_care" //   type of establishment to search for
   };
