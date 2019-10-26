@@ -9,6 +9,29 @@ import { spinnerOptions } from "./spinnerOpts";
 
 const _ = require("lodash");
 
+// // Imports the Google Cloud client library.
+// const { Storage } = require("@google-cloud/storage");
+
+// // Instantiates a client. If you don't specify credentials when constructing
+// // the client, the client library will look for credentials in the
+// // environment.
+// const storage = new Storage();
+
+// // Makes an authenticated API request.
+// storage
+//   .getBuckets()
+//   .then(results => {
+//     const buckets = results[0];
+
+//     console.log("Buckets:");
+//     buckets.forEach(bucket => {
+//       console.log(bucket.name);
+//     });
+//   })
+//   .catch(err => {
+//     console.error("ERROR:", err);
+//   });
+
 let map;
 let infowindow;
 let places = [];
@@ -100,7 +123,7 @@ function getSearchString(event) {
 // take the user entered location text and use geocode to return the lat-long coordinates
 function locationAddressSearch(query) {
   fetch(
-    `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=AIzaSyAvGb6zn5DU74zcegK54EVvr6GMQAFdC5o`
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=AIzaSyBprlmf2kjEuIMA60R22mBpyMSjU7pQy7s`
   )
     .then(checkStatus)
     .then(res => res.json())
@@ -387,7 +410,7 @@ function createMarker(place) {
     url: `./images/number-icons/number_${shopCounter}.png`,
     scaledSize: new google.maps.Size(35, 35)
   };
-
+  console.log(place);
   //create a marker
   let marker = new google.maps.Marker({
     map: map,
