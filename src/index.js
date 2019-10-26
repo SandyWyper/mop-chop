@@ -385,7 +385,7 @@ function createMarker(place) {
         url: `./images/number-icons/number_${shopCounter}.png`,
         scaledSize: new google.maps.Size(35, 35)
     };
-    console.log(place);
+    // console.log(place);
     //create a marker
     let marker = new google.maps.Marker({
         map: map,
