@@ -85,9 +85,12 @@ body {
 }
 
 :root {
-    --colorOne: rgb(2, 0, 86);
+    /* --colorOne: rgb(2, 0, 86);
     --colorTwo: rgb(232, 232, 232);
-    --colorThree: rgb(216, 206, 166);
+    --colorThree: rgb(216, 206, 166); */
+    --colorOne:#d4cbb8;
+    --colorTwo: #4e4e54;
+    --colorThree: #b0b0bf;
 
     --fontOne: "Lobster", serif;
     --fontTwo: "Raleway", sans-serif;
@@ -138,48 +141,45 @@ form {
 }
 
 .location-choice {
-    display: flex;
-    flex-direction: row-reverse;
     width: 100%;
-}
+    max-width: 470px;
+    margin: 0 auto;
 
-/* .input-search {
-  width: 100%;
-} */
+}
 
 .buttons {
     color: var(--colorOne);
     background-color: var(--colorTwo);
     line-height: 2rem;
-    /*font-family: var(--fontTwo);*/
+    font-family: var(--fontTwo);
     font-size: 20px;
     font-weight: 800;
 
-    border-left: 10px double var(--colorOne);
-    border-right: 10px double var(--colorOne);
-    border-top: none;
-    border-bottom: none;
-    /* border: 3.3px solid var(--colorOne); */
+    width: 100%;
 }
 
-.b1 {
-    border-radius: 4px;
-    width: 37%;
-    margin: 2rem 2rem 0.8rem 2rem;
+input.input {
+    width: 100%;
+    line-height: 2rem;
+    font-family: var(--fontTwo);
+    margin: 1rem auto;
+    padding: 0 0 0 1rem;
+    max-width: -webkit-fill-available;
+    
 }
-
+input.input:focus {
+    outline: none !important;
+    /* border:1px solid var(--colorOne); */
+    box-shadow: 0 0 4px var(--colorOne);
+}
 .buttons:hover {
     background-color: var(--colorOne);
     color: var(--colorTwo);
-    border: 3.3px solid var(--colorOne);
 }
 
-.b2 {
-    width: 100%;
-}
 .custom-search {
     text-align: center;
-    /* width: 100%; */
+    width: 100%;
     font-size: 20px;
     font-weight: 800;
     border: 1px solid white;
@@ -214,9 +214,6 @@ form {
     align-items: center;
     justify-content: flex-start;
     padding-bottom: 8px;
-}
-input {
-    font-family: var(--fontTwo);
 }
 
 .location-main-section h1 {
@@ -346,10 +343,7 @@ input {
         flex-direction: column-reverse;
         width: 100%;
     }
-    .b1 {
-        width: 30%;
-        margin: 1.5rem auto 0.5rem auto;
-    }
+
     .input-wrapper {
         padding-bottom: 0.5rem;
     }
@@ -394,202 +388,4 @@ input {
     1% {
         opacity: 1;
     }
-}
-
-/* Haruki input code code-drop  */
-.input {
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    margin: 1em;
-    max-width: 350px;
-    width: calc(100% - 2em);
-    vertical-align: top;
-}
-
-.input__field {
-    position: relative;
-    display: block;
-    float: right;
-    /* padding: 0.8em; */
-    width: 100%;
-    border: none;
-    border-radius: 0;
-    background: #f0f0f0;
-    color: #aaa;
-    font-weight: bold;
-    font-family: var(--fontTwo);
-    -webkit-appearance: none; /* for box shadows to show on iOS */
-}
-
-.input__field:focus {
-    outline: none;
-}
-
-.input__label {
-    display: inline-block;
-    float: right;
-    /* padding: 0 1em; */
-    width: 100%;
-    color: var(--colorOne);
-    font-weight: bold;
-    font-size: 20px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.input__label-content {
-    position: relative;
-    display: block;
-    padding: 1.6em 0;
-    width: 100%;
-}
-
-.graphic {
-    position: absolute;
-    top: 0;
-    left: 0;
-    fill: none;
-}
-
-.icon {
-    color: #ddd;
-    font-size: 150%;
-}
-
-/* Individual styles */
-
-/* Haruki */
-
-.input--haruki {
-    margin: 4em 1em 1em;
-}
-
-.input__field--haruki {
-    line-height: 2;
-    padding: 0.4em 0.25em;
-    width: 100%;
-    background: transparent;
-    color: var(--colorTwo);
-    font-size: 20px;
-}
-
-.input__label--haruki {
-    position: absolute;
-    width: 100%;
-    text-align: left;
-    pointer-events: none;
-}
-
-.input__label-content--haruki {
-    -webkit-transition: -webkit-transform 0.3s;
-    transition: transform 0.3s;
-}
-
-.input__label--haruki::before,
-.input__label--haruki::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    z-index: -1;
-    width: 100%;
-    height: 4px;
-    /* background: #6a7989; */
-    -webkit-transition: -webkit-transform 0.3s;
-    transition: transform 0.3s;
-}
-
-.input__label--haruki::before {
-    top: 0;
-}
-
-.input__label--haruki::after {
-    bottom: 0;
-}
-
-.input__field--haruki:focus + .input__label--haruki .input__label-content--haruki,
-.input--filled .input__label-content--haruki {
-    -webkit-transform: translate3d(0, -90%, 0);
-    transform: translate3d(0, -90%, 0);
-}
-
-.input__field--haruki:focus + .input__label--haruki::before,
-.input--filled .input__label--haruki::before {
-    -webkit-transform: translate3d(0, -0.5em, 0);
-    transform: translate3d(0, -0.5em, 0);
-}
-
-.input__field--haruki:focus + .input__label--haruki::after,
-.input--filled .input__label--haruki::after {
-    -webkit-transform: translate3d(0, 0.5em, 0);
-    transform: translate3d(0, 0.5em, 0);
-}
-
-.input--haruki {
-    margin: 4em 1em 1em;
-}
-
-.input__field--haruki {
-    padding: 0.4em 0.25em;
-    width: 100%;
-    background: transparent;
-    color: var(--colorOne);
-    font-size: 20px;
-}
-
-.input__label--haruki {
-    position: absolute;
-    width: 100%;
-    text-align: left;
-    pointer-events: none;
-}
-
-.input__label-content--haruki {
-    -webkit-transition: -webkit-transform 0.3s;
-    transition: transform 0.3s;
-}
-
-.input__label--haruki::before,
-.input__label--haruki::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    z-index: -1;
-    width: 100%;
-    height: 4px;
-    background: var(--colorOne);
-    -webkit-transition: -webkit-transform 0.3s;
-    transition: transform 0.3s;
-}
-
-.input__label--haruki::before {
-    top: 0;
-}
-
-.input__label--haruki::after {
-    bottom: 0;
-}
-
-.input__field--haruki:focus + .input__label--haruki .input__label-content--haruki,
-.input--filled .input__label-content--haruki {
-    -webkit-transform: translate3d(0, -90%, 0);
-    transform: translate3d(0, -90%, 0);
-}
-
-.input__field--haruki:focus + .input__label--haruki::before,
-.input--filled .input__label--haruki::before {
-    -webkit-transform: translate3d(0, -0.5em, 0);
-    transform: translate3d(0, -0.5em, 0);
-}
-
-.input__field--haruki:focus + .input__label--haruki::after,
-.input--filled .input__label--haruki::after {
-    -webkit-transform: translate3d(0, 0.5em, 0);
-    transform: translate3d(0, 0.5em, 0);
 }
