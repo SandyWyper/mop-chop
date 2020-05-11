@@ -18,25 +18,25 @@ let mapWindow = document.querySelector('#map');
 let shopCounter = 1;
 let spinner;
 
-const locationsDisplayed = document.querySelector('#location-details');
+const resultsDisplayArea = document.querySelector('#title-results');
 const form = document.querySelector('#form');
 
 form.onsubmit = (event) => {
+  event.preventDefault();
   const searchLocationString = event.target['location-input-field'].value;
   searchRadius = event.target['search-radius'].value;
   establishmentType = event.target['place-type'].value;
-
+  console.log(event);
   // if user has entered search string then send input to geocode function
   if (searchLocationString) {
     locationAddressSearch(searchLocationString);
   } else {
     //if not then - then make a not in the console
     console.log('input empty');
+    getGeoLoc();
   }
 
   // console.log(searchRadius, searchLocationString, establishmentType);
-
-  event.preventDefault();
 };
 
 function callApi() {
@@ -47,10 +47,10 @@ function callApi() {
 }
 
 function initApp() {
-  document
-    .querySelector('#location-details')
-    .addEventListener('click', revealInfo);
-  document.querySelector('#geolocate').addEventListener('click', getGeoLoc);
+  // document
+  //   .querySelector('#location-details')
+  //   .addEventListener('click', revealInfo);
+  // document.querySelector('#geolocate').addEventListener('click', getGeoLoc);
 
   //autocomplete for location input - restricted to uk results
   const autoOptions = {
@@ -68,7 +68,7 @@ function initApp() {
 
 //geolocation - gets users current location
 function getGeoLoc(event) {
-  event.preventDefault();
+  // event.preventDefault();
 
   const geoLocationOptions = {
     enableHighAccuracy: true,
@@ -137,7 +137,7 @@ function resetApp() {
   //reset shopCounter
   shopCounter = 1;
   // reset results output
-  locationsDisplayed.innerHTML = '';
+  resultsDisplayArea.innerHTML = '';
   //reset array of search result places
   places = [];
 }
@@ -298,7 +298,7 @@ function theseShops(results, status) {
   if (status === google.maps.places.PlacesServiceStatus.OK) {
     createMarker(results);
 
-    locationsDisplayed.innerHTML += `
+    resultsDisplayArea.innerHTML += `
         <section class="location">
             <div class="location-main-section" id="${results.place_id}-section" data-id="${results.place_id}">
                 <h1>${shopCounter}</h1>
