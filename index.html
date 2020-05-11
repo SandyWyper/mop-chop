@@ -1,46 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Mop-Chop-Shop</title>
-		<link rel="stylesheet" type="text/css" href="hair.css" />
-		<link rel="stylesheet" type="text/css" href="normalize.css" />
-	</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mop-Chop-Shop</title>
+    <link rel="stylesheet" type="text/css" href="hair.css" />
+    <link rel="stylesheet" type="text/css" href="normalize.css" />
+  </head>
 
-	<body>
-		<div class="wrapper">
-			<h1 class="app-title">
-				<img src="./images/Cut.png" alt="Scissors" />&nbsp;Mop-Chop-Shop&nbsp;
-				<img src="./images/Cut.png" alt="Scissors" />
-			</h1>
-			<h4 class="intro-text">
-				<em>Find the top 5 rated hairdressers or barbers in your area.</em>
-			</h4>
-			<div class="location-choice">
-				<button id="geolocate" class="buttons" name="here">Use current location</button>
-				<form class="input-search">
-					<div class="input-wrapper">
-							<input class="input" id="location-input-field" value="" type="text" placeholder="Custom Search" />
-					</div>
-					<div>
-						<button
-							id="location-submit-button"
-							type="submit"
-							value="submit"
-							class="buttons"
-							name="location-submit"
-							for="location-input-field"
-							style="display: none;"
-						>
-							Custom Search
-						</button>
-					</div>
-				</form>
-			</div>
-			<div id="map"></div>
-			<div id="location-details" class="location-details"></div>
-		</div>
-		<script src="./dist/main.js"></script>
-	</body>
+  <body>
+    <div class="wrapper">
+      <h1 class="app-title">
+        <img src="./images/Cut.png" alt="Scissors" />&nbsp;Mop-Chop-Shop&nbsp;
+        <img src="./images/Cut.png" alt="Scissors" />
+      </h1>
+      <h4 class="intro-text">
+        <em>Find the top 5 rated hairdressers or barbers in your area.</em>
+      </h4>
+      <div class="location-choice">
+        <button id="geolocate" class="buttons" name="here">
+          Use current location
+        </button>
+        <form id="form" class="input-search">
+          <div class="input-wrapper">
+            <input
+              class="input"
+              id="location-input-field"
+              type="text"
+              placeholder="Custom Search"
+            />
+          </div>
+          <div>
+            <select id="place-type">
+              <option value="hair_care">hair salon</option>
+              <option value="beauty_salon">beauty care</option>
+              <option value="cafe">cafe</option>
+              <option value="restaurant">restaurant</option>
+              <option value="meal_takeaway">takeaway</option>
+              <option value="rv_park">caravan park</option>
+            </select>
+            <select id="search-radius">
+              <option value="500">0.5</option>
+              <option value="1000">1</option>
+              <option value="2000">2</option>
+              <option value="3000">3</option>
+              <option value="4000">4</option>
+              <option value="5000">5</option>
+            </select>
+            <button
+              id="location-submit-button"
+              type="submit"
+              value="submit"
+              class="buttons"
+              name="location-submit"
+              for="location-input-field"
+              onsubmit="runAFunction"
+            >
+              Custom Search
+            </button>
+          </div>
+        </form>
+      </div>
+      <div id="map"></div>
+      <div id="location-details" class="location-details"></div>
+    </div>
+    <script src="./dist/main.js"></script>
+  </body>
 </html>
