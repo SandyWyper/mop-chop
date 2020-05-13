@@ -6,6 +6,8 @@
     <title>Mop-Chop-Shop</title>
     <!-- <link rel="stylesheet" type="text/css" href="normalize.css" /> -->
     <link rel="stylesheet" type="text/css" href="high5.css" />
+    <!-- <link rel="stylesheet" href="./owlcarousel/owl.carousel.css" />
+    <link rel="stylesheet" href="./owlcarousel/owl.theme.default.css" /> -->
   </head>
 
   <body>
@@ -15,9 +17,19 @@
           <h1>
             High-5!
           </h1>
-          <h3 class="intro-text">
+          <h3>
             Use the Google Places API to find the top 5 reviewed
-            <span id="business-type" style="color: #db3236;">caf&eacute;s</span>
+            <!-- <span id="business-type" style="color: #db3236;">caf&eacute;s</span> -->
+            <span
+              class="txt-rotate"
+              data-period="2000"
+              data-rotate='[ "caf&eacute;s","hair dressers",
+              "beauty salons",
+              "resaurants",
+              "takeaways",
+              "caravan parks"]'
+            ></span
+            ><br />
             in a given area.
           </h3>
         </div>
@@ -39,7 +51,7 @@
               type="text"
               placeholder="...enter a place"
             /><br />
-            <label for="location-input-field"
+            <label for="location-input-field" style="font-size: 0.75em;"
               >*leave blank to use current location</label
             >
           </div>
@@ -79,6 +91,12 @@
         </form>
       </section>
     </div>
+    <!-- <script
+      src="https://code.jquery.com/jquery-2.2.4.min.js"
+      integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+      crossorigin="anonymous"
+    ></script> -->
+    <!-- <script src="./owlcarousel/owl.carousel.js"></script> -->
     <script src="./dist/main.js"></script>
   </body>
 </html>

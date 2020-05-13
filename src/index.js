@@ -6,6 +6,8 @@ import { initialMapStyling } from './lib/initialMapStyling';
 import { doMapStyles } from './lib/doMapStyles';
 import { Spinner } from 'spin.js';
 import { spinnerOptions } from './spinnerOpts';
+// import '../owlcarousel/owl.carousel.css';
+// import '../owlcarousel/owl.carousel';
 
 const _ = require('lodash');
 
@@ -26,7 +28,6 @@ form.onsubmit = (event) => {
   const searchLocationString = event.target['location-input-field'].value;
   searchRadius = event.target['search-radius'].value;
   establishmentType = event.target['place-type'].value;
-  console.log(event);
   // if user has entered search string then send input to geocode function
   if (searchLocationString) {
     locationAddressSearch(searchLocationString);
@@ -35,11 +36,10 @@ form.onsubmit = (event) => {
     console.log('input empty');
     getGeoLoc();
   }
-
-  // console.log(searchRadius, searchLocationString, establishmentType);
 };
 
-function callApi() {
+function getStartedByCallingApi() {
+  textAnimate();
   // use static class function to run npm package to make api request
   MapApi.loadGoogleMapsApi()
     .then((res) => initApp())
@@ -53,6 +53,7 @@ function initApp() {
   // document.querySelector('#geolocate').addEventListener('click', getGeoLoc);
 
   //autocomplete for location input - restricted to uk results
+
   const autoOptions = {
     componentRestrictions: { country: 'uk' },
   };
@@ -137,7 +138,7 @@ function resetApp() {
   //reset shopCounter
   shopCounter = 1;
   // reset results output
-  resultsDisplayArea.innerHTML = '';
+  // resultsDisplayArea.innerHTML = '';
   //reset array of search result places
   places = [];
 }
@@ -188,7 +189,7 @@ function doMap(location) {
     fullscreenControl: false,
     styles: doMapStyles,
   };
-  console.log(options);
+
   //generate map to given location
   map = new google.maps.Map(document.querySelector('#map'), options);
 }
@@ -214,7 +215,6 @@ function hairCarePlaces(results, status, pagination) {
     status === google.maps.places.PlacesServiceStatus.OK &&
     results.length > 0
   ) {
-    // console.log(results[0].user_ratings_total);
     results.forEach(function (place, index) {
       if (results[index].user_ratings_total > 4) {
         places.push({
@@ -223,7 +223,6 @@ function hairCarePlaces(results, status, pagination) {
           totalRatings: place.user_ratings_total,
         });
       }
-      // console.log(places);
     });
     if (pagination.hasNextPage === true) {
       // this runs the callback function again with the next set of results
@@ -268,7 +267,7 @@ function unsuccsesfulSearch(r) {
 
 function getAdditionalDetails(salons) {
   let service = new google.maps.places.PlacesService(map);
-
+  resultsLayout();
   salons.forEach(function (shop) {
     let request = {
       placeId: shop.placeId,
@@ -288,7 +287,9 @@ function getAdditionalDetails(salons) {
     };
     service.getDetails(request, theseShops);
   });
-
+  document
+    .querySelector('#title-results')
+    .addEventListener('click', revealInfo);
   spinner.stop();
   let scrollToMap = document.querySelector('#map');
   scrollToMap.scrollIntoView({ behavior: 'smooth' });
@@ -299,20 +300,20 @@ function theseShops(results, status) {
     createMarker(results);
 
     resultsDisplayArea.innerHTML += `
-        <section class="location">
+        <div class="location">
             <div class="location-main-section" id="${results.place_id}-section" data-id="${results.place_id}">
                 <h1>${shopCounter}</h1>
                 <div class="name-ratings">
                     <div class="name">
-                        <h3>${results.name}</h3>
+                        <h5>${results.name}</h5>
                     </div>
                     <div class="ratings">
-                        <h3>Rating: ${results.rating} / 5 &nbsp; &nbsp;</h3>
-                        <h5><em>From ${results.user_ratings_total} ratings</em></h5>
+                        <h5>Rating: ${results.rating} / 5 &nbsp; &nbsp;</h5>
+                        <h6><em>From ${results.user_ratings_total} ratings</em></h6>
                     </div>
                 </div>
                 <div class="more-info" id="${results.place_id}-down-arrow">
-                <h1>&#8964;</h1>
+                <h2>&#8964;</h2>
                 </div>
             </div>
           
@@ -323,46 +324,45 @@ function theseShops(results, status) {
                             <p>${results.formatted_address}</p>
                         </div>
                         <div class="open-hours" id="${results.place_id}-open-hours">
-                            <p><strong>Opening times:</strong></p>
+                            <h5>Opening times:</h5>
                         </div>
                         <div>
-                          <div class="phone-number" >
-                              <a href="tel:${results.formatted_phone_number}" style="display:flex;"><img src="./images/telephone.svg" class="phone-icon"><p> : ${results.formatted_phone_number}</p></a>
+                          <div class="phone-number" id="${results.place_id}-phone">
                           </div>
                           <div class="website-link" id="${results.place_id}-website-link">
                           </div>
                         </div>
                     </div>
-                    <div class="photos">    
-                        <div class="photos" id="${results.place_id}-photos">
-                        </div>
-
-                    </div> 
+                    <div class="photo-carousel" id="${results.place_id}-photos">
+                    </div>
                 </div>           
                 <div class="reviews" id="${results.place_id}-reviews">
                     <h2>User reviews:</h2>
                     <br>
                 </div>
             </div>
-        </section>
+        </div>
             `;
-
+    if (results.formatted_phone_number) {
+      document.querySelector(`#${results.place_id}-phone`).innerHTML += `
+              <a href="tel:${results.formatted_phone_number}" style="display:flex;"><img src="./images/telephone.svg" class="phone-icon"><p> : ${results.formatted_phone_number}</p></a>                    `;
+    }
     if (results.website) {
       document.querySelector(`#${results.place_id}-website-link`).innerHTML += `
-             <a href="${results.website}" target="_blank" style="display:flex;"><img src="./images/website.png"><p>: Check out our website!</p></a>
+             <a href="${results.website}" target="_blank">${results.website}</a>
             `;
     }
 
     if (results.opening_hours) {
       let openingTimes = results.opening_hours.weekday_text;
-      openingTimes.forEach(
-        (day) =>
-          (document.querySelector(
-            `#${results.place_id}-open-hours`
-          ).innerHTML += `
-                <p>${day}</p>
-            `)
-      );
+      openingTimes.forEach((day) => {
+        document.querySelector(`#${results.place_id}-open-hours`).innerHTML += `
+                <div class="opening-days"><p>${day.substr(
+                  0,
+                  day.indexOf(':')
+                )}:</p><p>${day.substr(day.indexOf(':') + 1)}</p></div>
+            `;
+      });
     } else {
       document.querySelector(`#${results.place_id}-open-hours`).innerHTML += `
                             <p>No opening times avaiable</p>
@@ -374,8 +374,8 @@ function theseShops(results, status) {
       for (let x = 0; x < userReviews.length; x++) {
         document.querySelector(`#${results.place_id}-reviews`).innerHTML += `
                 <div>
-                    <p><strong>Rating : ${userReviews[x].rating}</strong> &nbsp;${userReviews[x].text}</p>
-                    <p><b>${userReviews[x].author_name}</b>  ${userReviews[x].relative_time_description}</p>
+                    <h5>Rating : ${userReviews[x].rating}</h5> <p>${userReviews[x].text}</p>
+                    <p><em>${userReviews[x].author_name}</em>  ${userReviews[x].relative_time_description}</p>
                     <br>
                 </div>
             `;
@@ -387,14 +387,14 @@ function theseShops(results, status) {
     }
 
     if (results.photos) {
-      let photos = _.take(results.photos, 3);
+      let photos = _.take(results.photos, 5);
       photos.forEach(function (pic) {
-        let eachPhoto = pic.getUrl({ maxWidth: 150, maxHeight: 150 });
+        let eachPhoto = pic.getUrl({ maxHeight: 150 });
         document.querySelector(`#${results.place_id}-photos`).innerHTML += `
-                 <img src="${eachPhoto}">
-
+                 <img src="${eachPhoto}" alt="${results.name}">
                 `;
       });
+      // initCarousel(results.place_id);
     }
     // increase search result counter by one
     shopCounter++;
@@ -430,8 +430,83 @@ function revealInfo(event) {
     // use the place_id from this section to reveal the correct box
     document.querySelector(`#${id}-hidden-section`).classList.toggle('hide');
     document.querySelector(`#${id}-down-arrow`).classList.toggle('spin');
-    document.querySelector(`#${id}-section`).classList.toggle('active');
+    document.querySelector(`#${id}-section`).classList.toggle('activeTab');
   }
 }
 
-window.onload = callApi();
+function resultsLayout() {
+  // reset results output
+  resultsDisplayArea.innerHTML = '';
+  injectHeader();
+  resultsDisplayArea.style['grid-row'] = '1 / 3';
+}
+
+function injectHeader() {
+  resultsDisplayArea.innerHTML += `
+  <div class="title-bar-small">
+    <a href='/'><h1>High-5!</h1></a>
+  </div>
+  `;
+}
+
+// credit to Gregory Schier for this cool typing effect
+// https://codepen.io/gschier/pen/jkivt
+var TxtRotate = function (el, toRotate, period) {
+  this.toRotate = toRotate;
+  this.el = el;
+  this.loopNum = 0;
+  this.period = parseInt(period, 10) || 2000;
+  this.txt = '';
+  this.tick();
+  this.isDeleting = false;
+};
+
+TxtRotate.prototype.tick = function () {
+  var i = this.loopNum % this.toRotate.length;
+  var fullTxt = this.toRotate[i];
+
+  if (this.isDeleting) {
+    this.txt = fullTxt.substring(0, this.txt.length - 1);
+  } else {
+    this.txt = fullTxt.substring(0, this.txt.length + 1);
+  }
+
+  this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+  var that = this;
+  var delta = 300 - Math.random() * 100;
+
+  if (this.isDeleting) {
+    delta /= 2;
+  }
+
+  if (!this.isDeleting && this.txt === fullTxt) {
+    delta = this.period;
+    this.isDeleting = true;
+  } else if (this.isDeleting && this.txt === '') {
+    this.isDeleting = false;
+    this.loopNum++;
+    delta = 500;
+  }
+
+  setTimeout(function () {
+    that.tick();
+  }, delta);
+};
+
+function textAnimate() {
+  var elements = document.getElementsByClassName('txt-rotate');
+  for (var i = 0; i < elements.length; i++) {
+    var toRotate = elements[i].getAttribute('data-rotate');
+    var period = elements[i].getAttribute('data-period');
+    if (toRotate) {
+      new TxtRotate(elements[i], JSON.parse(toRotate), period);
+    }
+  }
+  // INJECT CSS
+  var css = document.createElement('style');
+  css.type = 'text/css';
+  css.innerHTML = '.txt-rotate > .wrap { border-right: 0.08em solid #666 }';
+  document.body.appendChild(css);
+}
+window.onload = getStartedByCallingApi();
