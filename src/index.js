@@ -110,7 +110,7 @@ function getGeoLoc(event) {
 // take the user entered location text and use geocode to return the lat-long coordinates
 function locationAddressSearch(query) {
   fetch(
-    `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=AIzaSyCcGxKvLuBbTLpuQYStdXpa0aGiUuZr1DI`
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${secrets.PLACES_API}`
   )
     .then(checkStatus)
     .then((res) => res.json())
