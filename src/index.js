@@ -6,7 +6,7 @@ import { initialMapStyling } from './lib/initialMapStyling';
 import { doMapStyles } from './lib/doMapStyles';
 import { Spinner } from 'spin.js';
 import { spinnerOptions } from './spinnerOpts';
-// import '../owlcarousel/owl.carousel.css';
+import { truncateString } from './lib/truncateString';
 // import '../owlcarousel/owl.carousel';
 
 const _ = require('lodash');
@@ -348,8 +348,9 @@ function theseShops(results, status) {
               <a href="tel:${results.formatted_phone_number}" style="display:flex;"><img src="./images/telephone.svg" class="phone-icon"><p> : ${results.formatted_phone_number}</p></a>                    `;
     }
     if (results.website) {
+      const webUrlShort = truncateString(results.website, 12);
       document.querySelector(`#${results.place_id}-website-link`).innerHTML += `
-             <a href="${results.website}" target="_blank">${results.website}</a>
+             <a href="${results.website}" target="_blank">${webUrlShort}</a>
             `;
     }
 
@@ -444,7 +445,7 @@ function resultsLayout() {
 function injectHeader() {
   resultsDisplayArea.innerHTML += `
   <div class="title-bar-small">
-    <a href='/'><h1>High-5!</h1></a>
+    <a href='/mop-chop/'><h1>High-5!</h1></a>
   </div>
   `;
 }
