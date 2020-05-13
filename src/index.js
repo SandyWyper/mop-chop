@@ -348,7 +348,7 @@ function theseShops(results, status) {
               <a href="tel:${results.formatted_phone_number}" style="display:flex;"><img src="./images/telephone.svg" class="phone-icon"><p> : ${results.formatted_phone_number}</p></a>                    `;
     }
     if (results.website) {
-      const webUrlShort = truncateString(results.website, 12);
+      const webUrlShort = truncateString(results.website, 40);
       document.querySelector(`#${results.place_id}-website-link`).innerHTML += `
              <a href="${results.website}" target="_blank">${webUrlShort}</a>
             `;
