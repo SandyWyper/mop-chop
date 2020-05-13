@@ -114,9 +114,9 @@ body {
   background: var(--colorFive);
 }
 *::-webkit-scrollbar-thumb {
-  background-color: var(--colorFive);
+  background-color: var(--colorSix);
   border-radius: 20px;
-  border: 3px solid var(--colorFour);
+  border: 3px solid var(--colorSix);
 }
 /* Typography */
 h1 {
@@ -627,4 +627,7 @@ label {
   1% {
     opacity: 1;
   }
+}
+.txt-rotate {
+  color: #db3236;
 }
