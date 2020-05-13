@@ -77,6 +77,7 @@
       format('svg');
   /* Legacy iOS */
 }
+
 * {
   padding: 0;
   margin: 0;
@@ -98,7 +99,25 @@ body {
   --fontThree: 'Lobster Two', serif;
   --fontFour: 'Ubuntu', sans-serif;
 }
+/* The emerging W3C standard
+   that is currently Firefox-only */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--colorFive) var(--colorFour);
+}
 
+/* Works on Chrome/Edge/Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+*::-webkit-scrollbar-track {
+  background: var(--colorFive);
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--colorFive);
+  border-radius: 20px;
+  border: 3px solid var(--colorFour);
+}
 /* Typography */
 h1 {
   font-family: var(--fontThree);
