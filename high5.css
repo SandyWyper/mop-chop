@@ -86,7 +86,10 @@
 body {
   font-size: 18px;
 }
-
+/* MSIE: Prevents scrollbar from overlapping content. */
+body {
+  -ms-overflow-style: scrollbar;
+}
 :root {
   --colorOne: #ebe3cd;
   --colorTwo: #523735;
@@ -116,7 +119,7 @@ body {
 *::-webkit-scrollbar-thumb {
   background-color: var(--colorSix);
   border-radius: 20px;
-  border: 3px solid var(--colorSix);
+  border: 3px solid var(--colorFive);
 }
 /* Typography */
 h1 {
