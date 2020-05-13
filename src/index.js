@@ -291,8 +291,8 @@ function getAdditionalDetails(salons) {
     .querySelector('#title-results')
     .addEventListener('click', revealInfo);
   spinner.stop();
-  let scrollToMap = document.querySelector('#map');
-  scrollToMap.scrollIntoView({ behavior: 'smooth' });
+  // let scrollToMap = document.querySelector('#map');
+  // scrollToMap.scrollIntoView({ behavior: 'smooth' });
 }
 
 function theseShops(results, status) {
@@ -348,7 +348,7 @@ function theseShops(results, status) {
               <a href="tel:${results.formatted_phone_number}" style="display:flex;"><img src="./images/telephone.svg" class="phone-icon"><p> : ${results.formatted_phone_number}</p></a>                    `;
     }
     if (results.website) {
-      const webUrlShort = truncateString(results.website, 40);
+      const webUrlShort = truncateString(results.website, 35);
       document.querySelector(`#${results.place_id}-website-link`).innerHTML += `
              <a href="${results.website}" target="_blank">${webUrlShort}</a>
             `;
