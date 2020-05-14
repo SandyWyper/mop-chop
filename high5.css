@@ -484,7 +484,7 @@ label {
 }
 .phone-icon {
   width: 1rem;
-  height: auto;
+  height: 1.4rem;
   padding-right: 0.5rem;
 }
 @media only screen and (max-width: 992px) {
