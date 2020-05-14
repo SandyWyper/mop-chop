@@ -9,4 +9,5 @@ export function readyResultsArea(resultsDisplayArea) {
   `;
   // expand results area
   resultsDisplayArea.style['grid-row'] = '1 / 3';
+  resultsDisplayArea.style['-ms-grid-row-span'] = '2';
 }
