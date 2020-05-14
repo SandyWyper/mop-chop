@@ -1,5 +1,7 @@
 'use-strict';
 
+import textAnimate from './lib/animateText';
+
 import { MapApi } from './apiLoad';
 import { checkStatus } from './lib/checkFetchResponseStatus';
 import { initialMapStyling } from './lib/initialMapStyling';
@@ -7,7 +9,8 @@ import { doMapStyles } from './lib/doMapStyles';
 import { Spinner } from 'spin.js';
 import { spinnerOptions } from './spinnerOpts';
 import { truncateString } from './lib/truncateString';
-// import '../owlcarousel/owl.carousel';
+import { readyResultsArea } from './lib/readyResultsArea';
+import { zoomExtents } from './lib/zoomExtents';
 
 const _ = require('lodash');
 
@@ -16,44 +19,22 @@ let infowindow;
 let places = [];
 let searchRadius;
 let establishmentType;
-let mapWindow = document.querySelector('#map');
 let shopCounter = 1;
 let spinner;
-
 const resultsDisplayArea = document.querySelector('#title-results');
-const form = document.querySelector('#form');
+const mapWindow = document.querySelector('#map');
 
-form.onsubmit = (event) => {
-  event.preventDefault();
-  const searchLocationString = event.target['location-input-field'].value;
-  searchRadius = event.target['search-radius'].value;
-  establishmentType = event.target['place-type'].value;
-  // if user has entered search string then send input to geocode function
-  if (searchLocationString) {
-    locationAddressSearch(searchLocationString);
-  } else {
-    //if not then - then make a not in the console
-    console.log('input empty');
-    getGeoLoc();
-  }
-};
-
-function getStartedByCallingApi() {
+function initApp() {
+  // init text animation in subheading
   textAnimate();
   // use static class function to run npm package to make api request
   MapApi.loadGoogleMapsApi()
-    .then((res) => initApp())
+    .then((res) => readyApp())
     .catch((e) => console.log('api fetch unsuccessful: ' + e));
 }
 
-function initApp() {
-  // document
-  //   .querySelector('#location-details')
-  //   .addEventListener('click', revealInfo);
-  // document.querySelector('#geolocate').addEventListener('click', getGeoLoc);
-
+function readyApp() {
   //autocomplete for location input - restricted to uk results
-
   const autoOptions = {
     componentRestrictions: { country: 'uk' },
   };
@@ -67,10 +48,25 @@ function initApp() {
   map = new google.maps.Map(mapWindow, initialMapStyling);
 }
 
-//geolocation - gets users current location
-function getGeoLoc(event) {
-  // event.preventDefault();
+// Listen for user input and handle
+const form = document.querySelector('#form');
+form.onsubmit = (event) => {
+  event.preventDefault();
 
+  const searchLocationString = event.target['location-input-field'].value;
+  searchRadius = event.target['search-radius'].value;
+  establishmentType = event.target['place-type'].value;
+  // if user has entered search string then send input to geocode function
+  if (searchLocationString) {
+    locationAddressSearch(searchLocationString);
+  } else {
+    //if not then get the users location by
+    getGeoLoc(searchRadius, establishmentType);
+  }
+};
+
+//geolocation - gets users current location
+function getGeoLoc() {
   const geoLocationOptions = {
     enableHighAccuracy: true,
     timeout: 7000,
@@ -152,27 +148,6 @@ function useLocationDetails(location) {
   //start to get info on nearby hairdressers from the places api
   collatePlaceInfo(location);
 }
-//depending on the size of the search radius, decide what zoom setting to display the map on.
-function zoomEtents() {
-  switch (searchRadius) {
-    case '500':
-      return 15;
-    // break;
-    case '1000':
-      return 14;
-    // break;
-    case '2000':
-      return 13;
-    case '3000':
-      return 13;
-    case '4000':
-      return 13;
-    case '5000':
-      return 12;
-    default:
-      return 13;
-  }
-}
 
 function doMap(location) {
   let latitude = parseFloat(location.coords.lat);
@@ -181,7 +156,7 @@ function doMap(location) {
   let coords = new google.maps.LatLng(latitude, longitude);
 
   let options = {
-    zoom: zoomEtents(),
+    zoom: zoomExtents(searchRadius),
     center: coords,
     zoomControl: false,
     mapTypeControl: false,
@@ -267,7 +242,9 @@ function unsuccsesfulSearch(r) {
 
 function getAdditionalDetails(salons) {
   let service = new google.maps.places.PlacesService(map);
-  resultsLayout();
+
+  readyResultsArea(resultsDisplayArea);
+
   salons.forEach(function (shop) {
     let request = {
       placeId: shop.placeId,
@@ -291,8 +268,6 @@ function getAdditionalDetails(salons) {
     .querySelector('#title-results')
     .addEventListener('click', revealInfo);
   spinner.stop();
-  // let scrollToMap = document.querySelector('#map');
-  // scrollToMap.scrollIntoView({ behavior: 'smooth' });
 }
 
 function theseShops(results, status) {
@@ -395,7 +370,6 @@ function theseShops(results, status) {
                  <img src="${eachPhoto}" alt="${results.name}">
                 `;
       });
-      // initCarousel(results.place_id);
     }
     // increase search result counter by one
     shopCounter++;
@@ -435,79 +409,4 @@ function revealInfo(event) {
   }
 }
 
-function resultsLayout() {
-  // reset results output
-  resultsDisplayArea.innerHTML = '';
-  injectHeader();
-  resultsDisplayArea.style['grid-row'] = '1 / 3';
-}
-
-function injectHeader() {
-  resultsDisplayArea.innerHTML += `
-  <div class="title-bar-small">
-    <a href='/mop-chop/'><h1>High-5!</h1></a>
-  </div>
-  `;
-}
-
-// credit to Gregory Schier for this cool typing effect
-// https://codepen.io/gschier/pen/jkivt
-var TxtRotate = function (el, toRotate, period) {
-  this.toRotate = toRotate;
-  this.el = el;
-  this.loopNum = 0;
-  this.period = parseInt(period, 10) || 2000;
-  this.txt = '';
-  this.tick();
-  this.isDeleting = false;
-};
-
-TxtRotate.prototype.tick = function () {
-  var i = this.loopNum % this.toRotate.length;
-  var fullTxt = this.toRotate[i];
-
-  if (this.isDeleting) {
-    this.txt = fullTxt.substring(0, this.txt.length - 1);
-  } else {
-    this.txt = fullTxt.substring(0, this.txt.length + 1);
-  }
-
-  this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
-
-  var that = this;
-  var delta = 300 - Math.random() * 100;
-
-  if (this.isDeleting) {
-    delta /= 2;
-  }
-
-  if (!this.isDeleting && this.txt === fullTxt) {
-    delta = this.period;
-    this.isDeleting = true;
-  } else if (this.isDeleting && this.txt === '') {
-    this.isDeleting = false;
-    this.loopNum++;
-    delta = 500;
-  }
-
-  setTimeout(function () {
-    that.tick();
-  }, delta);
-};
-
-function textAnimate() {
-  var elements = document.getElementsByClassName('txt-rotate');
-  for (var i = 0; i < elements.length; i++) {
-    var toRotate = elements[i].getAttribute('data-rotate');
-    var period = elements[i].getAttribute('data-period');
-    if (toRotate) {
-      new TxtRotate(elements[i], JSON.parse(toRotate), period);
-    }
-  }
-  // INJECT CSS
-  var css = document.createElement('style');
-  css.type = 'text/css';
-  css.innerHTML = '.txt-rotate > .wrap { border-right: 0.08em solid #666 }';
-  document.body.appendChild(css);
-}
-window.onload = getStartedByCallingApi();
+window.onload = initApp();
