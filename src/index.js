@@ -207,7 +207,8 @@ function hairCarePlaces(results, status, pagination) {
       // once all the places have been logged, order them in desecending order by rating
       let sortedByRating = _.orderBy(
         places,
-        ['userRating', 'totalRatings'],
+        // ['userRating', 'totalRatings'],
+        ['userRating'],
         ['desc']
       );
 
