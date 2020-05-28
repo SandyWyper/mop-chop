@@ -17,9 +17,10 @@ const _ = require('lodash');
 let map;
 let infowindow;
 let places = [];
+let placesResults = [];
 let searchRadius;
 let establishmentType;
-let shopCounter = 1;
+let requestCount;
 let spinner;
 const resultsDisplayArea = document.querySelector('#title-results');
 const mapWindow = document.querySelector('#map');
@@ -52,6 +53,9 @@ function readyApp() {
 const form = document.querySelector('#form');
 form.onsubmit = (event) => {
   event.preventDefault();
+
+  //reset array of search result places
+  places = [];
 
   const searchLocationString = event.target['location-input-field'].value;
   searchRadius = event.target['search-radius'].value;
@@ -129,19 +133,7 @@ function extractGeometry(data) {
   return geometry;
 }
 
-// resests all out-put for a new search
-function resetApp() {
-  //reset shopCounter
-  shopCounter = 1;
-  // reset results output
-  // resultsDisplayArea.innerHTML = '';
-  //reset array of search result places
-  places = [];
-}
-
 function useLocationDetails(location) {
-  resetApp();
-
   doMap(location);
   // while the search is being completed, show a spinning wheel
   spinner = new Spinner(spinnerOptions).spin(mapWindow);
@@ -204,19 +196,17 @@ function hairCarePlaces(results, status, pagination) {
       // max 2 additional pages of results. total 60 results.
       pagination.nextPage();
     } else {
-      // once all the places have been logged, order them in desecending order by rating
-      let sortedByRating = _.orderBy(
-        places,
-        // ['userRating', 'totalRatings'],
-        ['userRating'],
-        ['desc']
-      );
+      // once all the places have been logged, order them in desecending order by rating.
+      const sortedByRating = _.orderBy(places, ['userRating'], ['desc']);
 
       // then just take the top five
-      let topFiveSalons = _.take(sortedByRating, 5);
+      let topFive = _.take(sortedByRating, 5);
+      // keep a log of how many request will be made
+      requestCount = topFive.length;
+
       // getAdditionalDetails(topFiveSalons);
-      if (topFiveSalons.length > 0) {
-        getAdditionalDetails(topFiveSalons);
+      if (topFive.length > 0) {
+        getAdditionalDetails(topFive);
       } else {
         unsuccsesfulSearch('reviews');
       }
@@ -232,8 +222,6 @@ function unsuccsesfulSearch(r) {
   //placeholder map
   map = new google.maps.Map(mapWindow, initialMapStyling);
 
-  resetApp();
-
   if (r === 'results') {
     alert('sorry, no results in that area');
   } else if (r === 'reviews') {
@@ -241,12 +229,12 @@ function unsuccsesfulSearch(r) {
   }
 }
 
-function getAdditionalDetails(salons) {
+function getAdditionalDetails(topFive) {
   let service = new google.maps.places.PlacesService(map);
 
   readyResultsArea(resultsDisplayArea);
 
-  salons.forEach(function (shop) {
+  topFive.forEach(function (shop) {
     let request = {
       placeId: shop.placeId,
       fields: [
@@ -263,7 +251,7 @@ function getAdditionalDetails(salons) {
         'review',
       ],
     };
-    service.getDetails(request, theseShops);
+    service.getDetails(request, addResultToArray);
   });
   document
     .querySelector('#title-results')
@@ -271,21 +259,41 @@ function getAdditionalDetails(salons) {
   spinner.stop();
 }
 
-function theseShops(results, status) {
+function addResultToArray(results, status) {
   if (status === google.maps.places.PlacesServiceStatus.OK) {
-    createMarker(results);
+    placesResults.push(results);
+  }
+  if (placesResults.length === requestCount) {
+    const sortedByRatingAgain = _.orderBy(
+      placesResults,
+      // ['userRating', 'totalRatings'],
+      ['rating'],
+      ['desc']
+    );
+    sortedByRatingAgain.forEach((place, index) => {
+      theseShops(place, index);
+    });
+  }
+}
 
-    resultsDisplayArea.innerHTML += `
+function theseShops(results, index) {
+  createMarker(results, index);
+
+  resultsDisplayArea.innerHTML += `
         <div class="location">
-            <div class="location-main-section" id="${results.place_id}-section" data-id="${results.place_id}">
-                <h1>${shopCounter}</h1>
+            <div class="location-main-section" id="${
+              results.place_id
+            }-section" data-id="${results.place_id}">
+                <h1>${index + 1}</h1>
                 <div class="name-ratings">
                     <div class="name">
                         <h5>${results.name}</h5>
                     </div>
                     <div class="ratings">
                         <h5>Rating: ${results.rating} / 5 &nbsp; &nbsp;</h5>
-                        <h6><em>From ${results.user_ratings_total} ratings</em></h6>
+                        <h6><em>From ${
+                          results.user_ratings_total
+                        } ratings</em></h6>
                     </div>
                 </div>
                 <div class="more-info" id="${results.place_id}-down-arrow">
@@ -299,13 +307,19 @@ function theseShops(results, status) {
                         <div class="address">
                             <p>${results.formatted_address}</p>
                         </div>
-                        <div class="open-hours" id="${results.place_id}-open-hours">
+                        <div class="open-hours" id="${
+                          results.place_id
+                        }-open-hours">
                             <h5>Opening times:</h5>
                         </div>
                         <div>
-                          <div class="phone-number" id="${results.place_id}-phone">
+                          <div class="phone-number" id="${
+                            results.place_id
+                          }-phone">
                           </div>
-                          <div class="website-link" id="${results.place_id}-website-link">
+                          <div class="website-link" id="${
+                            results.place_id
+                          }-website-link">
                           </div>
                         </div>
                     </div>
@@ -319,68 +333,65 @@ function theseShops(results, status) {
             </div>
         </div>
             `;
-    if (results.formatted_phone_number) {
-      document.querySelector(`#${results.place_id}-phone`).innerHTML += `
+  if (results.formatted_phone_number) {
+    document.querySelector(`#${results.place_id}-phone`).innerHTML += `
               <a href="tel:${results.formatted_phone_number}" style="display:flex;"><img src="./images/telephone.svg" class="phone-icon"><p> : ${results.formatted_phone_number}</p></a>                    `;
-    }
-    if (results.website) {
-      const webUrlShort = truncateString(results.website, 35);
-      document.querySelector(`#${results.place_id}-website-link`).innerHTML += `
+  }
+  if (results.website) {
+    const webUrlShort = truncateString(results.website, 35);
+    document.querySelector(`#${results.place_id}-website-link`).innerHTML += `
              <a href="${results.website}" target="_blank">${webUrlShort}</a>
             `;
-    }
+  }
 
-    if (results.opening_hours) {
-      let openingTimes = results.opening_hours.weekday_text;
-      openingTimes.forEach((day) => {
-        document.querySelector(`#${results.place_id}-open-hours`).innerHTML += `
+  if (results.opening_hours) {
+    let openingTimes = results.opening_hours.weekday_text;
+    openingTimes.forEach((day) => {
+      document.querySelector(`#${results.place_id}-open-hours`).innerHTML += `
                 <div class="opening-days"><p>${day.substr(
                   0,
                   day.indexOf(':')
                 )}:</p><p>${day.substr(day.indexOf(':') + 1)}</p></div>
             `;
-      });
-    } else {
-      document.querySelector(`#${results.place_id}-open-hours`).innerHTML += `
+    });
+  } else {
+    document.querySelector(`#${results.place_id}-open-hours`).innerHTML += `
                             <p>No opening times avaiable</p>
                         `;
-    }
+  }
 
-    if (results.reviews) {
-      let userReviews = results.reviews;
-      for (let x = 0; x < userReviews.length; x++) {
-        document.querySelector(`#${results.place_id}-reviews`).innerHTML += `
+  if (results.reviews) {
+    let userReviews = results.reviews;
+    for (let x = 0; x < userReviews.length; x++) {
+      document.querySelector(`#${results.place_id}-reviews`).innerHTML += `
                 <div>
                     <h5>Rating : ${userReviews[x].rating}</h5> <p>${userReviews[x].text}</p>
                     <p><em>${userReviews[x].author_name}</em>  ${userReviews[x].relative_time_description}</p>
                     <br>
                 </div>
             `;
-      }
-    } else {
-      document.querySelector(`#${results.place_id}-reviews`).innerHTML += `
+    }
+  } else {
+    document.querySelector(`#${results.place_id}-reviews`).innerHTML += `
                             <p>No reviews avaiable</p>
                         `;
-    }
+  }
 
-    if (results.photos) {
-      let photos = _.take(results.photos, 5);
-      photos.forEach(function (pic) {
-        let eachPhoto = pic.getUrl({ maxHeight: 150 });
-        document.querySelector(`#${results.place_id}-photos`).innerHTML += `
+  if (results.photos) {
+    let photos = _.take(results.photos, 5);
+    photos.forEach(function (pic) {
+      let eachPhoto = pic.getUrl({ maxHeight: 150 });
+      document.querySelector(`#${results.place_id}-photos`).innerHTML += `
                  <img src="${eachPhoto}" alt="${results.name}">
                 `;
-      });
-    }
-    // increase search result counter by one
-    shopCounter++;
+    });
   }
 }
 
-function createMarker(place) {
+function createMarker(place, index) {
   //set the icon image and size preferences
   const iconImage = {
-    url: `./images/number-icons/number_${shopCounter}.png`,
+    url: `./images/number-icons/number_${index}.png`,
     scaledSize: new google.maps.Size(35, 35),
   };
   //create a marker
