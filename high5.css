@@ -196,7 +196,7 @@ label {
   color: var(--colorFive);
   z-index: 2;
   overflow-y: auto;
-  display: flex;
+  /* display: flex; */
 }
 #search-options {
   -ms-grid-row: 2;
@@ -233,6 +233,7 @@ label {
   align-items: flex-end;
   padding: 0 4rem;
   text-align: right;
+  height: -webkit-fill-available;
 }
 
 .search-area {
