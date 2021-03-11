@@ -3,7 +3,7 @@ const loadGoogleMapsApi = require('load-google-maps-api');
 class MapApi {
   static loadGoogleMapsApi() {
     return loadGoogleMapsApi({
-      key: 'AIzaSyBhF6NIX0O2cmBMx3IpHtrvkyc09YfioMg',
+      key: 'AIzaSyDIfb1nXWDg2kwRNTseTnBuIcPrB-2DqMM',
       libraries: ['places'],
     });
   }
