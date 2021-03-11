@@ -40,10 +40,7 @@ function readyApp() {
     componentRestrictions: { country: 'uk' },
   };
   let placeInput = document.querySelector('#location-input-field');
-  let autocomplete = new google.maps.places.Autocomplete(
-    placeInput,
-    autoOptions
-  );
+  let autocomplete = new google.maps.places.Autocomplete(placeInput, autoOptions);
 
   //placeholder map
   map = new google.maps.Map(mapWindow, initialMapStyling);
@@ -97,11 +94,7 @@ function getGeoLoc() {
   }
 
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      success,
-      failure,
-      geoLocationOptions
-    );
+    navigator.geolocation.getCurrentPosition(success, failure, geoLocationOptions);
   } else {
     alert('geolocation not supported by your browser');
   }
@@ -109,9 +102,7 @@ function getGeoLoc() {
 
 // take the user entered location text and use geocode to return the lat-long coordinates
 function locationAddressSearch(query) {
-  fetch(
-    `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=AIzaSyCcGxKvLuBbTLpuQYStdXpa0aGiUuZr1DI`
-  )
+  fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=AIzaSyCcGxKvLuBbTLpuQYStdXpa0aGiUuZr1DI`)
     .then(checkStatus)
     .then((res) => res.json())
     .then(function (data) {
@@ -178,11 +169,7 @@ function collatePlaceInfo(location) {
 }
 
 function searchPlaces(results, status, pagination) {
-  if (
-    status === google.maps.places.PlacesServiceStatus.OK &&
-    results.length > 0
-  ) {
-    console.log(results);
+  if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
     results.forEach(function (place, index) {
       if (results[index].user_ratings_total > 4) {
         places.push({
@@ -238,25 +225,11 @@ function getAdditionalDetails(topFive) {
   topFive.forEach(function (shop) {
     let request = {
       placeId: shop.placeId,
-      fields: [
-        'name',
-        'place_id',
-        'formatted_address',
-        'geometry',
-        'photo',
-        'user_ratings_total',
-        'formatted_phone_number',
-        'opening_hours',
-        'website',
-        'rating',
-        'review',
-      ],
+      fields: ['name', 'place_id', 'formatted_address', 'geometry', 'photo', 'user_ratings_total', 'formatted_phone_number', 'opening_hours', 'website', 'rating', 'review'],
     };
     service.getDetails(request, addResultToArray);
   });
-  document
-    .querySelector('#title-results')
-    .addEventListener('click', revealInfo);
+  document.querySelector('#title-results').addEventListener('click', revealInfo);
   spinner.stop();
 }
 
@@ -282,9 +255,7 @@ function theseShops(results, index) {
 
   resultsDisplayArea.innerHTML += `
         <div class="location">
-            <div class="location-main-section" id="${
-              results.place_id
-            }-section" data-id="${results.place_id}">
+            <div class="location-main-section" id="${results.place_id}-section" data-id="${results.place_id}">
                 <h1>${index + 1}</h1>
                 <div class="name-ratings">
                     <div class="name">
@@ -292,9 +263,7 @@ function theseShops(results, index) {
                     </div>
                     <div class="ratings">
                         <h5>Rating: ${results.rating} / 5 &nbsp; &nbsp;</h5>
-                        <h6><em>From ${
-                          results.user_ratings_total
-                        } ratings</em></h6>
+                        <h6><em>From ${results.user_ratings_total} ratings</em></h6>
                     </div>
                 </div>
                 <div class="more-info" id="${results.place_id}-down-arrow">
@@ -308,19 +277,13 @@ function theseShops(results, index) {
                         <div class="address">
                             <p>${results.formatted_address}</p>
                         </div>
-                        <div class="open-hours" id="${
-                          results.place_id
-                        }-open-hours">
+                        <div class="open-hours" id="${results.place_id}-open-hours">
                             <h5>Opening times:</h5>
                         </div>
                         <div>
-                          <div class="phone-number" id="${
-                            results.place_id
-                          }-phone">
+                          <div class="phone-number" id="${results.place_id}-phone">
                           </div>
-                          <div class="website-link" id="${
-                            results.place_id
-                          }-website-link">
+                          <div class="website-link" id="${results.place_id}-website-link">
                           </div>
                         </div>
                     </div>
@@ -349,10 +312,7 @@ function theseShops(results, index) {
     let openingTimes = results.opening_hours.weekday_text;
     openingTimes.forEach((day) => {
       document.querySelector(`#${results.place_id}-open-hours`).innerHTML += `
-                <div class="opening-days"><p>${day.substr(
-                  0,
-                  day.indexOf(':')
-                )}:</p><p>${day.substr(day.indexOf(':') + 1)}</p></div>
+                <div class="opening-days"><p>${day.substr(0, day.indexOf(':'))}:</p><p>${day.substr(day.indexOf(':') + 1)}</p></div>
             `;
     });
   } else {
