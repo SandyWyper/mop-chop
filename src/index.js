@@ -174,14 +174,15 @@ function collatePlaceInfo(location) {
 
   infowindow = new google.maps.InfoWindow();
   let service = new google.maps.places.PlacesService(map);
-  service.nearbySearch(request, hairCarePlaces);
+  service.nearbySearch(request, searchPlaces);
 }
 
-function hairCarePlaces(results, status, pagination) {
+function searchPlaces(results, status, pagination) {
   if (
     status === google.maps.places.PlacesServiceStatus.OK &&
     results.length > 0
   ) {
+    console.log(results);
     results.forEach(function (place, index) {
       if (results[index].user_ratings_total > 4) {
         places.push({

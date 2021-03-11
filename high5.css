@@ -5,16 +5,10 @@
   font-weight: 400;
   src: url('./fonts/lobster-v21-latin-regular.eot');
   /* IE9 Compat Modes */
-  src: local('Lobster Regular'), local('Lobster-Regular'),
-    url('./fonts/lobster-v21-latin-regular.eot?#iefix')
-      format('embedded-opentype'),
-    /* IE6-IE8 */ url('./fonts/lobster-v21-latin-regular.woff2') format('woff2'),
-    /* Super Modern Browsers */ url('./fonts/lobster-v21-latin-regular.woff')
-      format('woff'),
-    /* Modern Browsers */ url('./fonts/lobster-v21-latin-regular.ttf')
-      format('truetype'),
-    /* Safari, Android, iOS */
-      url('./fonts/lobster-v21-latin-regular.svg#Lobster') format('svg');
+  src: local('Lobster Regular'), local('Lobster-Regular'), url('./fonts/lobster-v21-latin-regular.eot?#iefix') format('embedded-opentype'),
+    /* IE6-IE8 */ url('./fonts/lobster-v21-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */ url('./fonts/lobster-v21-latin-regular.woff') format('woff'),
+    /* Modern Browsers */ url('./fonts/lobster-v21-latin-regular.ttf') format('truetype'),
+    /* Safari, Android, iOS */ url('./fonts/lobster-v21-latin-regular.svg#Lobster') format('svg');
   /* Legacy iOS */
 }
 
@@ -25,17 +19,10 @@
   font-weight: 400;
   src: url('./fonts/lobster-two-v11-latin-regular.eot');
   /* IE9 Compat Modes */
-  src: local('Lobster Two'), local('LobsterTwo'),
-    url('./fonts/lobster-two-v11-latin-regular.eot?#iefix')
-      format('embedded-opentype'),
-    /* IE6-IE8 */ url('./fonts/lobster-two-v11-latin-regular.woff2')
-      format('woff2'),
-    /* Super Modern Browsers */
-      url('./fonts/lobster-two-v11-latin-regular.woff') format('woff'),
-    /* Modern Browsers */ url('./fonts/lobster-two-v11-latin-regular.ttf')
-      format('truetype'),
-    /* Safari, Android, iOS */
-      url('./fonts/lobster-two-v11-latin-regular.svg#LobsterTwo') format('svg');
+  src: local('Lobster Two'), local('LobsterTwo'), url('./fonts/lobster-two-v11-latin-regular.eot?#iefix') format('embedded-opentype'),
+    /* IE6-IE8 */ url('./fonts/lobster-two-v11-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */ url('./fonts/lobster-two-v11-latin-regular.woff') format('woff'),
+    /* Modern Browsers */ url('./fonts/lobster-two-v11-latin-regular.ttf') format('truetype'),
+    /* Safari, Android, iOS */ url('./fonts/lobster-two-v11-latin-regular.svg#LobsterTwo') format('svg');
   /* Legacy iOS */
 }
 
@@ -46,16 +33,10 @@
   font-weight: 400;
   src: url('./fonts/ubuntu-v13-latin-regular.eot');
   /* IE9 Compat Modes */
-  src: local('Ubuntu Regular'), local('Ubuntu-Regular'),
-    url('./fonts/ubuntu-v13-latin-regular.eot?#iefix')
-      format('embedded-opentype'),
-    /* IE6-IE8 */ url('./fonts/ubuntu-v13-latin-regular.woff2') format('woff2'),
-    /* Super Modern Browsers */ url('./fonts/ubuntu-v13-latin-regular.woff')
-      format('woff'),
-    /* Modern Browsers */ url('./fonts/ubuntu-v13-latin-regular.ttf')
-      format('truetype'),
-    /* Safari, Android, iOS */
-      url('./fonts/ubuntu-v13-latin-regular.svg#Ubuntu') format('svg');
+  src: local('Ubuntu Regular'), local('Ubuntu-Regular'), url('./fonts/ubuntu-v13-latin-regular.eot?#iefix') format('embedded-opentype'),
+    /* IE6-IE8 */ url('./fonts/ubuntu-v13-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */ url('./fonts/ubuntu-v13-latin-regular.woff') format('woff'),
+    /* Modern Browsers */ url('./fonts/ubuntu-v13-latin-regular.ttf') format('truetype'),
+    /* Safari, Android, iOS */ url('./fonts/ubuntu-v13-latin-regular.svg#Ubuntu') format('svg');
   /* Legacy iOS */
 }
 
@@ -66,15 +47,9 @@
   font-weight: 500;
   src: url('./fonts/ubuntu-v13-latin-500.eot');
   /* IE9 Compat Modes */
-  src: local('Ubuntu Medium'), local('Ubuntu-Medium'),
-    url('./fonts/ubuntu-v13-latin-500.eot?#iefix') format('embedded-opentype'),
-    /* IE6-IE8 */ url('./fonts/ubuntu-v13-latin-500.woff2') format('woff2'),
-    /* Super Modern Browsers */ url('./fonts/ubuntu-v13-latin-500.woff')
-      format('woff'),
-    /* Modern Browsers */ url('./fonts/ubuntu-v13-latin-500.ttf')
-      format('truetype'),
-    /* Safari, Android, iOS */ url('./fonts/ubuntu-v13-latin-500.svg#Ubuntu')
-      format('svg');
+  src: local('Ubuntu Medium'), local('Ubuntu-Medium'), url('./fonts/ubuntu-v13-latin-500.eot?#iefix') format('embedded-opentype'),
+    /* IE6-IE8 */ url('./fonts/ubuntu-v13-latin-500.woff2') format('woff2'), /* Super Modern Browsers */ url('./fonts/ubuntu-v13-latin-500.woff') format('woff'),
+    /* Modern Browsers */ url('./fonts/ubuntu-v13-latin-500.ttf') format('truetype'), /* Safari, Android, iOS */ url('./fonts/ubuntu-v13-latin-500.svg#Ubuntu') format('svg');
   /* Legacy iOS */
 }
 
@@ -221,6 +196,7 @@ label {
   color: var(--colorFive);
   z-index: 2;
   overflow-y: auto;
+  display: flex;
 }
 #search-options {
   -ms-grid-row: 2;
@@ -255,7 +231,6 @@ label {
   -webkit-box-align: end;
   -ms-flex-align: end;
   align-items: flex-end;
-  height: 100%;
   padding: 0 4rem;
   text-align: right;
 }
@@ -511,8 +486,8 @@ label {
   .wrapper {
     -ms-grid-columns: 100%;
     grid-template-columns: 100%;
-    -ms-grid-rows: auto 0.2rem 220px 0.2rem 400px;
-    grid-template-rows: auto 220px 400px;
+    -ms-grid-rows: 33vh 0.2rem 66vh 0.2rem auto;
+    grid-template-rows: 66vh 32vh auto;
     height: auto;
   }
   .wrapper > *:nth-child(1) {
