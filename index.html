@@ -13,9 +13,7 @@
     <div class="wrapper">
       <section id="title-results">
         <div class="app-title">
-          <h1>
-            High-5!
-          </h1>
+          <h1>High-5!</h1>
           <h3>
             Use the Google Places API to find the top 5 reviewed<br />
             <span
@@ -25,7 +23,10 @@
               "beauty salons",
               "resaurants",
               "takeaways",
-              "caravan parks"]'
+              "caravan parks",
+              "dentists",
+              "mechanics",
+              "bars"]'
             ></span
             ><br />
             in a given area.
@@ -43,7 +44,7 @@
               type="text"
               placeholder="...enter a place"
             /><br />
-            <label for="location-input-field" style="font-size: 0.75em;"
+            <label for="location-input-field" style="font-size: 0.75em"
               >*leave blank to use current location</label
             >
           </div>
@@ -56,6 +57,12 @@
               <option value="restaurant">restaurant</option>
               <option value="meal_takeaway">takeaway</option>
               <option value="rv_park">caravan park</option>
+
+              <option value="bar">bar</option>
+              <option value="car_repair">mechanic</option>
+              <option value="dentist">dentist</option>
+              <option value="night_club">night club</option>
+              <option value="lodging">accomodation</option>
             </select>
           </div>
           <div>
