@@ -1,18 +1,18 @@
-'use-strict';
+"use-strict";
 
-import textAnimate from './lib/animateText';
+import textAnimate from "./lib/animateText";
 
-import { MapApi } from './apiLoad';
-import { checkStatus } from './lib/checkFetchResponseStatus';
-import { initialMapStyling } from './lib/initialMapStyling';
-import { doMapStyles } from './lib/doMapStyles';
-import { Spinner } from 'spin.js';
-import { spinnerOptions } from './spinnerOpts';
-import { truncateString } from './lib/truncateString';
-import { readyResultsArea } from './lib/readyResultsArea';
-import { zoomExtents } from './lib/zoomExtents';
+import { MapApi } from "./apiLoad";
+import { checkStatus } from "./lib/checkFetchResponseStatus";
+import { initialMapStyling } from "./lib/initialMapStyling";
+import { doMapStyles } from "./lib/doMapStyles";
+import { Spinner } from "spin.js";
+import { spinnerOptions } from "./spinnerOpts";
+import { truncateString } from "./lib/truncateString";
+import { readyResultsArea } from "./lib/readyResultsArea";
+import { zoomExtents } from "./lib/zoomExtents";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 let map;
 let infowindow;
@@ -22,8 +22,8 @@ let searchRadius;
 let establishmentType;
 let requestCount;
 let spinner;
-const resultsDisplayArea = document.querySelector('#title-results');
-const mapWindow = document.querySelector('#map');
+const resultsDisplayArea = document.querySelector("#title-results");
+const mapWindow = document.querySelector("#map");
 
 function initApp() {
   // init text animation in subheading
@@ -31,32 +31,35 @@ function initApp() {
   // use static class function to run npm package to make api request
   MapApi.loadGoogleMapsApi()
     .then((res) => readyApp())
-    .catch((e) => console.log('api fetch unsuccessful: ' + e));
+    .catch((e) => console.log("api fetch unsuccessful: " + e));
 }
 
 function readyApp() {
   //autocomplete for location input - restricted to uk results
   const autoOptions = {
-    componentRestrictions: { country: 'uk' },
+    componentRestrictions: { country: "uk" },
   };
-  let placeInput = document.querySelector('#location-input-field');
-  let autocomplete = new google.maps.places.Autocomplete(placeInput, autoOptions);
+  let placeInput = document.querySelector("#location-input-field");
+  let autocomplete = new google.maps.places.Autocomplete(
+    placeInput,
+    autoOptions
+  );
 
   //placeholder map
   map = new google.maps.Map(mapWindow, initialMapStyling);
 }
 
 // Listen for user input and handle
-const form = document.querySelector('#form');
+const form = document.querySelector("#form");
 form.onsubmit = (event) => {
   event.preventDefault();
 
   //reset array of search result places
   places = [];
 
-  const searchLocationString = event.target['location-input-field'].value;
-  searchRadius = event.target['search-radius'].value;
-  establishmentType = event.target['place-type'].value;
+  const searchLocationString = event.target["location-input-field"].value;
+  searchRadius = event.target["search-radius"].value;
+  establishmentType = event.target["place-type"].value;
   // if user has entered search string then send input to geocode function
   if (searchLocationString) {
     locationAddressSearch(searchLocationString);
@@ -82,39 +85,45 @@ function getGeoLoc() {
         lng: pos.coords.longitude,
       },
     };
-    searchRadius = document.querySelector('#search-radius').value;
-    establishmentType = document.querySelector('#place-type').value;
+    searchRadius = document.querySelector("#search-radius").value;
+    establishmentType = document.querySelector("#place-type").value;
     useLocationDetails(location);
   }
 
   //error alert in the console and to user
   function failure(err) {
-    alert('something went wrong, please enter a location manually');
+    alert("something went wrong, please enter a location manually");
     console.warn(`Error(${err.code}) : ${err.message}`);
   }
 
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(success, failure, geoLocationOptions);
+    navigator.geolocation.getCurrentPosition(
+      success,
+      failure,
+      geoLocationOptions
+    );
   } else {
-    alert('geolocation not supported by your browser');
+    alert("geolocation not supported by your browser");
   }
 }
 
 // take the user entered location text and use geocode to return the lat-long coordinates
 function locationAddressSearch(query) {
-  fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=AIzaSyCcGxKvLuBbTLpuQYStdXpa0aGiUuZr1DI`)
+  fetch(
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=AIzaSyCcGxKvLuBbTLpuQYStdXpa0aGiUuZr1DI`
+  )
     .then(checkStatus)
     .then((res) => res.json())
     .then(function (data) {
       let searchLocation = extractGeometry(data.results);
       useLocationDetails(searchLocation);
     })
-    .catch((err) => console.log('error is : ' + err));
+    .catch((err) => console.log("error is : " + err));
 }
 
 function extractGeometry(data) {
-  const latitude = _.get(data, '[0].geometry.location.lat');
-  const longitude = _.get(data, '[0].geometry.location.lng');
+  const latitude = _.get(data, "[0].geometry.location.lat");
+  const longitude = _.get(data, "[0].geometry.location.lng");
   const geometry = {
     coords: {
       lat: latitude,
@@ -149,7 +158,7 @@ function doMap(location) {
   };
 
   //generate map to given location
-  map = new google.maps.Map(document.querySelector('#map'), options);
+  map = new google.maps.Map(document.querySelector("#map"), options);
 }
 
 function collatePlaceInfo(location) {
@@ -169,7 +178,10 @@ function collatePlaceInfo(location) {
 }
 
 function searchPlaces(results, status, pagination) {
-  if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
+  if (
+    status === google.maps.places.PlacesServiceStatus.OK &&
+    results.length > 0
+  ) {
     results.forEach(function (place, index) {
       if (results[index].user_ratings_total > 4) {
         places.push({
@@ -185,7 +197,7 @@ function searchPlaces(results, status, pagination) {
       pagination.nextPage();
     } else {
       // once all the places have been logged, order them in desecending order by rating.
-      const sortedByRating = _.orderBy(places, ['userRating'], ['desc']);
+      const sortedByRating = _.orderBy(places, ["userRating"], ["desc"]);
 
       // then just take the top five
       let topFive = _.take(sortedByRating, 5);
@@ -196,11 +208,11 @@ function searchPlaces(results, status, pagination) {
       if (topFive.length > 0) {
         getAdditionalDetails(topFive);
       } else {
-        unsuccsesfulSearch('reviews');
+        unsuccsesfulSearch("reviews");
       }
     }
   } else {
-    unsuccsesfulSearch('results');
+    unsuccsesfulSearch("results");
   }
 }
 
@@ -210,10 +222,10 @@ function unsuccsesfulSearch(r) {
   //placeholder map
   map = new google.maps.Map(mapWindow, initialMapStyling);
 
-  if (r === 'results') {
-    alert('sorry, no results in that area');
-  } else if (r === 'reviews') {
-    alert('Sorry, mop-chop-shops need at least 5 reviews');
+  if (r === "results") {
+    alert("sorry, no results in that area");
+  } else if (r === "reviews") {
+    alert("Sorry, mop-chop-shops need at least 5 reviews");
   }
 }
 
@@ -225,11 +237,25 @@ function getAdditionalDetails(topFive) {
   topFive.forEach(function (shop) {
     let request = {
       placeId: shop.placeId,
-      fields: ['name', 'place_id', 'formatted_address', 'geometry', 'photo', 'user_ratings_total', 'formatted_phone_number', 'opening_hours', 'website', 'rating', 'review'],
+      fields: [
+        "name",
+        "place_id",
+        "formatted_address",
+        "geometry",
+        "photo",
+        "user_ratings_total",
+        "formatted_phone_number",
+        "opening_hours",
+        "website",
+        "rating",
+        "review",
+      ],
     };
     service.getDetails(request, addResultToArray);
   });
-  document.querySelector('#title-results').addEventListener('click', revealInfo);
+  document
+    .querySelector("#title-results")
+    .addEventListener("click", revealInfo);
   spinner.stop();
 }
 
@@ -241,8 +267,8 @@ function addResultToArray(results, status) {
     const sortedByRatingAgain = _.orderBy(
       placesResults,
       // ['userRating', 'totalRatings'],
-      ['rating'],
-      ['desc']
+      ["rating"],
+      ["desc"]
     );
     sortedByRatingAgain.forEach((place, index) => {
       theseShops(place, index);
@@ -255,7 +281,9 @@ function theseShops(results, index) {
 
   resultsDisplayArea.innerHTML += `
         <div class="location">
-            <div class="location-main-section" id="${results.place_id}-section" data-id="${results.place_id}">
+            <div class="location-main-section" id="${
+              results.place_id
+            }-section" data-id="${results.place_id}">
                 <h1>${index + 1}</h1>
                 <div class="name-ratings">
                     <div class="name">
@@ -263,7 +291,9 @@ function theseShops(results, index) {
                     </div>
                     <div class="ratings">
                         <h5>Rating: ${results.rating} / 5 &nbsp; &nbsp;</h5>
-                        <h6><em>From ${results.user_ratings_total} ratings</em></h6>
+                        <h6><em>From ${
+                          results.user_ratings_total
+                        } ratings</em></h6>
                     </div>
                 </div>
                 <div class="more-info" id="${results.place_id}-down-arrow">
@@ -277,13 +307,19 @@ function theseShops(results, index) {
                         <div class="address">
                             <p>${results.formatted_address}</p>
                         </div>
-                        <div class="open-hours" id="${results.place_id}-open-hours">
+                        <div class="open-hours" id="${
+                          results.place_id
+                        }-open-hours">
                             <h5>Opening times:</h5>
                         </div>
                         <div>
-                          <div class="phone-number" id="${results.place_id}-phone">
+                          <div class="phone-number" id="${
+                            results.place_id
+                          }-phone">
                           </div>
-                          <div class="website-link" id="${results.place_id}-website-link">
+                          <div class="website-link" id="${
+                            results.place_id
+                          }-website-link">
                           </div>
                         </div>
                     </div>
@@ -312,7 +348,10 @@ function theseShops(results, index) {
     let openingTimes = results.opening_hours.weekday_text;
     openingTimes.forEach((day) => {
       document.querySelector(`#${results.place_id}-open-hours`).innerHTML += `
-                <div class="opening-days"><p>${day.substr(0, day.indexOf(':'))}:</p><p>${day.substr(day.indexOf(':') + 1)}</p></div>
+                <div class="opening-days"><p>${day.substr(
+                  0,
+                  day.indexOf(":")
+                )}:</p><p>${day.substr(day.indexOf(":") + 1)}</p></div>
             `;
     });
   } else {
@@ -352,7 +391,7 @@ function theseShops(results, index) {
 function createMarker(place, index) {
   //set the icon image and size preferences
   const iconImage = {
-    url: `./images/number-icons/number_${index}.png`,
+    url: `./images/number-icons/number_${index + 1}.png`,
     scaledSize: new google.maps.Size(35, 35),
   };
   //create a marker
@@ -363,7 +402,7 @@ function createMarker(place, index) {
   });
 
   //instill each info window with content and the abitlity to open upon click event
-  google.maps.event.addListener(marker, 'click', function () {
+  google.maps.event.addListener(marker, "click", function () {
     //info window content
     infowindow.setContent(place.name);
     infowindow.open(map, this);
@@ -372,13 +411,13 @@ function createMarker(place, index) {
 
 function revealInfo(event) {
   // finds the nearest thing with a given class from the click target
-  if (event.target.closest('.location-main-section')) {
-    let boxToExpand = event.target.closest('.location-main-section');
+  if (event.target.closest(".location-main-section")) {
+    let boxToExpand = event.target.closest(".location-main-section");
     let id = boxToExpand.dataset.id;
     // use the place_id from this section to reveal the correct box
-    document.querySelector(`#${id}-hidden-section`).classList.toggle('hide');
-    document.querySelector(`#${id}-down-arrow`).classList.toggle('spin');
-    document.querySelector(`#${id}-section`).classList.toggle('activeTab');
+    document.querySelector(`#${id}-hidden-section`).classList.toggle("hide");
+    document.querySelector(`#${id}-down-arrow`).classList.toggle("spin");
+    document.querySelector(`#${id}-section`).classList.toggle("activeTab");
   }
 }
 
